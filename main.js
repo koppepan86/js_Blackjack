@@ -15,7 +15,3 @@ class Card{
         this._mark = value;
     }
 }
-
-let card1 = new Card("h", 1);
-console.log(card1.mark);
-console.log(card1._mark);
