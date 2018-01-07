@@ -1,5 +1,6 @@
 "use strict"
 
+//カードを管理するクラス
 class Card{
     constructor(mark, num){
         this._mark = mark;
@@ -15,6 +16,7 @@ class Card{
     }
 }
 
+//デッキを管理するクラス
 class Deck{
     constructor(){
         this._cards = new Array(52);
@@ -23,7 +25,7 @@ class Deck{
     get cards(){ return this._cards; }
     set cards(value){ this._cards = value; }
 
-    reset(){
+    setDefault(){
         this.cards = new Array(52); 
         for(let i = 0; i < this.cards.length; i++){
             let mark;
@@ -48,15 +50,102 @@ class Deck{
     }
 
     draw(){
-        let rand = Math.floor(Math.random() * cards.length);
-        let card = cards[rand];
-        cards.splice(rand, 1);
+        let rand = Math.floor(Math.random() * this.cards.length);
+        let card = this.cards[rand];
+        // console.log(card.mark);
+        // console.log(this.cards.splice(rand, 1).mark);
+        this.cards.splice(rand, 1);
+        return card;
     }
 }
 
+//手札を管理するクラス
+class Hand{
+    constructor(){
+        this._cards = new Array(2);
+    }
+
+    get cards(){ return this._cards; }
+    set cards(value){ this._cards = value; }
+
+    //手札の合計値を返す
+    get sum(){
+        let cardsSum = 0;
+        for(let temp of this.cards){
+            //TODO:Aの処理
+            if(temp.num >= 11){
+                cardsSum += 10;
+            }else{
+                cardsSum += temp.num;
+            }
+        }
+        return cardsSum;
+     }
+
+    setDefault(first, second){
+        this.cards[0] = first;
+        this.cards[1] = second;
+    }
+
+    addCard(add){
+        this.cards.push(add);
+    }
+}
+
+//場を管理するクラス
+class Field{
+    constructor(){
+        //手札とデッキの初期化
+        this._deck = new Deck();
+        this._deck.setDefault();
+        this._dealerHand = new Hand();
+        this._dealerHand.setDefault(this._deck.draw(), this._deck.draw());
+        this._playerHand = new Hand();
+        this._playerHand.setDefault(this._deck.draw(), this._deck.draw());
+
+        //各ボタンのID取得
+        document.getElementById();
+    }
+
+    get dealerHand(){ return this._dealerHand; }
+    get playerHand(){ return this._playerHand; }
+
+    //カードを一枚引く
+    hit(){
+        
+    }
+
+    //勝負する
+    //0: 敗北 1:勝利 -1: 引き分け
+    stand(){
+        if(this.dealerHand > this.playerHand){
+            return 0;
+        }else if(this.dealerHand < this.playerHand){
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+
+    //手札の合計点数をチェックする
+    check(){
+
+    }
+}
+
+
+//以下テスト用余白
 let deck = new Deck();
 
 let cards = deck.cards;
 deck.reset();
+let hand = new Hand();
+hand.setDefault(deck.draw(), deck.draw());
+
+console.log(deck.cards.length);
+console.log(deck.draw().mark);
+console.log(hand.cards[0].mark, hand.cards[0].num);
+console.log(hand.cards[1].mark, hand.cards[1].num);
+console.log(hand.sum);
 
 
