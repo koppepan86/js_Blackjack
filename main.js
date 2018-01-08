@@ -138,8 +138,12 @@ class Field{
 let field = new Field();
 
 document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("btn").addEventListener("click", function(){
-        window.alert("on click");
+    document.getElementById("hit").addEventListener("click", function(){
+        window.alert("hit");
+    }, false);
+
+    document.getElementById("stand").addEventListener("click", function(){
+        window.alert("stand");
     }, false);
 }, false);
 
