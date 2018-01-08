@@ -83,6 +83,7 @@ class Hand{
      }
 
     setDefault(first, second){
+        this.cards = new Array(2);
         this.cards[0] = first;
         this.cards[1] = second;
     }
@@ -95,7 +96,7 @@ class Hand{
 //場を管理するクラス
 class Field{
     constructor(){
-        //手札とデッキの初期化
+        //場の手札とデッキの初期化
         this._deck = new Deck();
         this._deck.setDefault();
         this._dealerHand = new Hand();
@@ -104,15 +105,16 @@ class Field{
         this._playerHand.setDefault(this._deck.draw(), this._deck.draw());
 
         //各ボタンのID取得
-        document.getElementById();
+        document.getElementById("");
     }
 
+    get deck(){ return this._deck; }
     get dealerHand(){ return this._dealerHand; }
     get playerHand(){ return this._playerHand; }
 
     //カードを一枚引く
     hit(){
-        
+
     }
 
     //勝負する
@@ -133,19 +135,27 @@ class Field{
     }
 }
 
+let field = new Field();
 
-//以下テスト用余白
-let deck = new Deck();
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("btn").addEventListener("click", function(){
+        window.alert("on click");
+    }, false);
+}, false);
 
-let cards = deck.cards;
-deck.reset();
-let hand = new Hand();
-hand.setDefault(deck.draw(), deck.draw());
+(()=>{
+    //以下テスト用余白
+    let deck = new Deck();
 
-console.log(deck.cards.length);
-console.log(deck.draw().mark);
-console.log(hand.cards[0].mark, hand.cards[0].num);
-console.log(hand.cards[1].mark, hand.cards[1].num);
-console.log(hand.sum);
+    let cards = deck.cards;
+    deck.setDefault();
+    let hand = new Hand();
+    hand.setDefault(deck.draw(), deck.draw());
 
+    //初期手札は問題ないか
+    console.log(hand.cards[0].mark, hand.cards[0].num);
+    console.log(hand.cards[1].mark, hand.cards[1].num);
 
+    //合計の計算は問題ないか
+    console.log(hand.sum);
+})();
