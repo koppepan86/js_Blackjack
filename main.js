@@ -3,7 +3,15 @@
 //カードを管理するクラス
 class Card{
     constructor(mark, num){
+        /**
+         * カードのマーク
+         * @type {String}
+         */
         this._mark = mark;
+        /**
+         * カードの数値
+         * @type {number}
+         */
         this._num = num;
     }
 
@@ -52,8 +60,6 @@ class Deck{
     draw(){
         let rand = Math.floor(Math.random() * this.cards.length);
         let card = this.cards[rand];
-        // console.log(card.mark);
-        // console.log(this.cards.splice(rand, 1).mark);
         this.cards.splice(rand, 1);
         return card;
     }
@@ -72,7 +78,7 @@ class Hand{
     get sum(){
         let cardsSum = 0;
         for(let temp of this.cards){
-            //TODO:Aの処理
+            //TODO:A エース の処理
             if(temp.num >= 11){
                 cardsSum += 10;
             }else{
@@ -112,9 +118,27 @@ class Field{
     get dealerHand(){ return this._dealerHand; }
     get playerHand(){ return this._playerHand; }
 
-    //カードを一枚引く
+    /**
+     * カードを分配する
+     * @return {string}
+     */
     hit(){
+        //両者カードを引く
+        this.dealerHand.addCard(this.deck.draw());
+        this.playerHand.addCard(this.deck.draw());
 
+        //合計点数のチェック
+        if(this.dealerHand.sum > 21 && this.playerHand.sum > 21){
+            //引き分け
+            return "draw";
+        }
+        if(this.dealerHand.sum > 21){
+            return "win";
+        }
+        if(this.playerHand.sum > 21){
+            return "loss";
+        }
+        return "continue";
     }
 
     //勝負する
@@ -130,6 +154,8 @@ class Field{
     }
 
     //手札の合計点数をチェックする
+    //hitの後に必ずチェックする
+    //hitでいいのでは？
     check(){
 
     }
@@ -139,7 +165,7 @@ let field = new Field();
 
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("hit").addEventListener("click", function(){
-        window.alert("hit");
+        window.alert(field.hit());
     }, false);
 
     document.getElementById("stand").addEventListener("click", function(){
@@ -148,6 +174,7 @@ document.addEventListener("DOMContentLoaded", function(){
 }, false);
 
 (()=>{
+    console.log("test start");
     //以下テスト用余白
     let deck = new Deck();
 
