@@ -20,8 +20,7 @@ class Card{
     get num(){ return this._num; }
     set num(value){ this._num = value; }
 
-    get log(){ console.log("mark :" + this.mark + ", num :" + this.num);
-    }
+    get toString(){ return "mark :" + this.mark + ", num :" + this.num;}
 }
 
 //デッキを管理するクラス
@@ -110,12 +109,12 @@ class Field{
         this._playerHand = new Hand();
         this._playerHand.setDefault(this._deck.draw(), this._deck.draw());
 
-        //各ボタンのID取得
+        //各テキストのID取得
         this._dealerText = document.getElementById("dealer");
         this._playerText = document.getElementById("player");
         this._text = document.getElementById("text");
 
-        console.log(this.dealerText.textContent);
+        this.updateWindow();
     }
 
     get deck(){ return this._deck; }
@@ -127,7 +126,9 @@ class Field{
     get text(){ return this._text; }
 
     set dealerText(value){ this._dealerText.textContent = value; }
+    set dealerTextAppend(value){ this._dealerText.textContent += value; }
     set playerText(value){ this._playerText.textContent = value; }
+    set playerTextAppend(value){ this._playerText.textContent += value; }
     set text(value){ this._text.textContent = value; }
 
     /**
@@ -138,7 +139,7 @@ class Field{
         //両者カードを引く
         this.dealerHand.addCard(this.deck.draw());
         this.playerHand.addCard(this.deck.draw());
-
+        this.updateWindow();
         //合計点数のチェック
         if(this.dealerHand.sum > 21 && this.playerHand.sum > 21){
             //引き分け
@@ -153,6 +154,7 @@ class Field{
             this.text = "loss";
             return "loss";
         }
+        
         return "continue";
     }
 
@@ -179,7 +181,17 @@ class Field{
 
     //表示の更新
     updateWindow(){
+        this.dealerText = " ";
+        this.playerText = " ";
+        for(let i = 0; i < this.dealerHand.cards.length; i++){
+            this.dealerTextAppend = this.dealerHand.cards[i].mark;
+            this.dealerTextAppend = this.dealerHand.cards[i].num + " ";
+        }
 
+        for(let i = 0; i < this.playerHand.cards.length; i++){
+            this.playerTextAppend = this.playerHand.cards[i].mark;
+            this.playerTextAppend = this.playerHand.cards[i].num + " ";
+        }
     }
 }
 
