@@ -136,23 +136,13 @@ class Field{
      * @return {string}
      */
     hit(){
-        //両者カードを引く
-        this.dealerHand.addCard(this.deck.draw());
         this.playerHand.addCard(this.deck.draw());
         this.updateWindow();
-        //合計点数のチェック
-        if(this.dealerHand.sum > 21 && this.playerHand.sum > 21){
-            //引き分け
-            this.text = "draw";
-            return "draw";
-        }
-        if(this.dealerHand.sum > 21){
-            this.text = "win";
-            return "win";
-        }
+
+        //21を超えたらbust(loss)
         if(this.playerHand.sum > 21){
-            this.text = "loss";
-            return "loss";
+            this.text = "bust";
+            return "bust";
         }
         
         return "continue";
@@ -161,13 +151,23 @@ class Field{
     //勝負する
     //0: 敗北 1:勝利 -1: 引き分け
     stand(){
-        //TODO:ディーラーが引いていく処理を追加する
-        if(this.dealerHand > this.playerHand){
-            return 0;
-        }else if(this.dealerHand < this.playerHand){
-            return 1;
+        //ディーラーが引いていく処理
+        while(this.dealerHand.sum < 17){
+            this.dealerHand.addCard(this.deck.draw());
+            this.updateWindow();
+        }
+
+        //勝敗の決着
+        if(this.playerHand.sum == this.dealerHand.sum){
+            //TODO:ナチュラルブラックジャックの処理
+            this.text = "draw";
+            return "draw";
+        }else if(this.playerHand.sum > this.dealerHand.sum || this.dealerHand.sum > 21){
+            this.text = "win";
+            return "win";
         }else{
-            return -1;
+            this.text = "loss";
+            return "loss";
         }
     }
 
@@ -199,11 +199,11 @@ document.addEventListener("DOMContentLoaded", function(){
     let field = new Field();
 
     document.getElementById("hit").addEventListener("click", function(){
-        window.alert(field.hit());
+        field.hit();
     }, false);
 
     document.getElementById("stand").addEventListener("click", function(){
-        window.alert("stand");
+        field.stand();
     }, false);
 
 }, false);
