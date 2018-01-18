@@ -76,12 +76,21 @@ class Hand{
     //手札の合計値を返す
     get sum(){
         let cardsSum = 0;
+        let aceFlag = 0;
         for(let temp of this.cards){
             //TODO:A エース の処理
+            if(temp.num == 1)aceFlag++;
             if(temp.num >= 11){
                 cardsSum += 10;
             }else{
                 cardsSum += temp.num;
+            }
+        }
+        if(aceFlag > 0){
+            while(aceFlag != 0){
+                if(cardsSum + 10 > 21)break;
+                cardsSum += 10;
+                aceFlag--;
             }
         }
         return cardsSum;
@@ -115,6 +124,7 @@ class Field{
         this._text = document.getElementById("text");
 
         this.updateWindow();
+        this.drawSum()
     }
 
     get deck(){ return this._deck; }
@@ -130,6 +140,11 @@ class Field{
     set playerText(value){ this._playerText.textContent = value; }
     set playerTextAppend(value){ this._playerText.textContent += value; }
     set text(value){ this._text.textContent = value; }
+
+    drawSum(){
+        document.getElementById("dealerSum").textContent = this.dealerHand.sum;
+        document.getElementById("playerSum").textContent = this.playerHand.sum;
+    }
 
     /**
      * カードを分配する
@@ -200,10 +215,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.getElementById("hit").addEventListener("click", function(){
         field.hit();
+        field.drawSum();
     }, false);
 
     document.getElementById("stand").addEventListener("click", function(){
         field.stand();
+        field.drawSum();
     }, false);
 
 }, false);
